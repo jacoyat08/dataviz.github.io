@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Data Viz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3><a href='index.html'>Data Viz</a></h3>
+  </div>
+  <div class="w3-bar-block">
+    <a href="dotplot.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dot-Plot</a>
+    <div class="w3-dropdown-hover">
+      <button class="w3-button">Box-Plot<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block">
+        <a href="boxplot.html" class="w3-bar-item w3-button">One Variable Box-Plot</a>
+        <a href="multibox.html" class="w3-bar-item w3-button">Multiple Variables Box-Plot</a>
+      </div>
+    </div>
+    <div class="w3-dropdown-hover">
+      <button class="w3-button">Bar Chart<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block">
+      <a href="bar.html" class="w3-bar-item w3-button">One Variable Bar Chart</a>
+      <a href="multibar.html" class="w3-bar-item w3-button">Multiple Variables Bar Chart</a>
+      <a href="stackedbar.html" class="w3-bar-item w3-button">Stacked Variables Bar Chart</a>
+    </div>
+  </div>
+    <a href="example1.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Histogram</a>
+      <div class="w3-dropdown-hover">
+          <button class="w3-button">Line Chart<i class="fa fa-caret-down"></i></button>
+          <div class="w3-dropdown-content w3-bar-block">
+              <a href="line.html" class="w3-bar-item w3-button">One Variable Line Chart</a>
+              <a href="multiline.html" class="w3-bar-item w3-button">Multiple Variables Line Chart</a>
+          </div>
+      </div>
+    <a href="example.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Scatter Plot</a>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+  <span>DATAVIZ</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- scatter -->
+  <div class="w3-container" id="packages" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>One Variable Bar Chart</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+  </div>
+
+  <meta charset="UTF-8">
+
+  <script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	title:{
+		text: "Survey of Users Favorite Social Media Platform "
+	},
+	axisY: {
+		title: "Number of Users",
+		stripLines: [{
+		value: 134500,
+		label: "Average"
+    }]
+    },
+    exportEnabled: true,
+	data: [{
+		type: "column",
+		showInLegend: true,
+		legendMarkerColor: "black",
+		legendText: "Social Media Platform",
+
+		dataPoints: [
+			{ y: 300878, label: "Instagram" },
+			{ y: 266455,  label: "Facebook" },
+			{ y: 169709,  label: "Twitter" },
+			{ y: 158400,  label: "SnapChat" },
+			{ y: 142503,  label: "TickToc" },
+			{ y: 101500, label: "Pintrest" },
+			{ y: 97800,  label: "LinkedIn" },
+		]
+	}]
+});
+chart.render();
+
+}
+
+</script>
+
+</head>
+<body>
+<br/><!-- Just so that JSFiddle's Result label doesn't overlap the Chart -->
+<div id="chartContainer" style="height: 370px; width: 800px; margin: 0px auto;"></div>
+
+<script src="canvasjs.min.js"></script>
+</body>
+</html>
