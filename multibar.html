@@ -36,7 +36,7 @@ body {font-size:16px;}
       <a href="stackedbar.html" class="w3-bar-item w3-button">Stacked Variables Bar Chart</a>
     </div>
   </div>
-    <a href="example1.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Histogram</a>
+    <a href="histogram.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Histogram</a>
       <div class="w3-dropdown-hover">
           <button class="w3-button">Line Chart<i class="fa fa-caret-down"></i></button>
           <div class="w3-dropdown-content w3-bar-block">
@@ -47,7 +47,7 @@ body {font-size:16px;}
     <div class="w3-dropdown-hover">
       <button class="w3-button">Scatter Plot<i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block">
-        <a href="scatter.html" class="w3-bar-item w3-button">One Variable Scatter Plot</a>
+        <a href="scatter.html" class="w3-bar-item w3-button">Scatter Plot</a>
         <a href="multiscatter.html" class="w3-bar-item w3-button">Multiple Variables Scatter Plot</a></nav>
 
 <!-- Top menu on small screens -->
@@ -64,7 +64,85 @@ body {font-size:16px;}
 
   <!-- scatter -->
   <div class="w3-container" id="packages" style="margin-top:75px">
-    <h1 class="w3-xxxlarge w3-text-red"><b>Welcome to DataViz</b></h1>
-    <h1 class="w3-xxxlarge w3-text-red"><b>Choose a Visual to Explore</b></h1>
+    <h1 class="w3-xxxlarge w3-text-red"><b>Multiple Variables Bar Chart</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
+
+  <meta charset="UTF-8">
+<script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "Girls vs Boys Favorite Food"
+	},
+	axisY: {
+		titleFontColor: "#4F81BC",
+		lineColor: "#4F81BC",
+		labelFontColor: "#4F81BC",
+		tickColor: "#4F81BC",
+	},
+	axisY2: {
+		titleFontColor: "#C0504E",
+		lineColor: "#C0504E",
+		labelFontColor: "#C0504E",
+		tickColor: "#C0504E"
+	},
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		cursor:"pointer",
+		itemclick: toggleDataSeries
+	},
+	data: [{
+		type: "column",
+		name: "Boys",
+		legendText: "Boys",
+		showInLegend: true,
+		dataPoints:[
+			{ label: "Spaghetti", y: 10 },
+			{ label: "Tacos", y: 210 },
+			{ label: "Burgers", y: 100 },
+			{ label: "Pizza", y: 200 },
+			{ label: "Chicken Strips", y: 110 },
+			{ label: "Hot Dogs", y: 50}
+		]
+	},
+	{
+		type: "column",
+		name: "Girls",
+		legendText: "Girls",
+		axisYType: "primary",
+		showInLegend: true,
+		dataPoints:[
+			{ label: "Spaghetti", y: 200 },
+			{ label: "Tacos", y: 110 },
+			{ label: "Burger", y: 80 },
+			{ label: "Pizza", y: 115 },
+			{ label: "Chicken Strips", y: 105 },
+			{ label: "Hot Dogs", y: 105 }
+		]
+	}]
+});
+chart.render();
+
+function toggleDataSeries(e) {
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	}
+	else {
+		e.dataSeries.visible = true;
+	}
+	chart.render();
+}
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+<script src="canvasjs.min.js"></script>
+</body>
+</html>

@@ -44,11 +44,8 @@ body {font-size:16px;}
               <a href="multiline.html" class="w3-bar-item w3-button">Multiple Variables Line Chart</a>
           </div>
       </div>
-    <div class="w3-dropdown-hover">
-      <button class="w3-button">Scatter Plot<i class="fa fa-caret-down"></i></button>
-      <div class="w3-dropdown-content w3-bar-block">
-        <a href="scatter.html" class="w3-bar-item w3-button">One Variable Scatter Plot</a>
-        <a href="multiscatter.html" class="w3-bar-item w3-button">Multiple Variables Scatter Plot</a></nav>
+    <a href="example.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Scatter Plot</a>
+</nav>
 
 <!-- Top menu on small screens -->
 <header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
@@ -61,10 +58,97 @@ body {font-size:16px;}
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:340px;margin-right:40px">
-
   <!-- scatter -->
   <div class="w3-container" id="packages" style="margin-top:75px">
-    <h1 class="w3-xxxlarge w3-text-red"><b>Welcome to DataViz</b></h1>
-    <h1 class="w3-xxxlarge w3-text-red"><b>Choose a Visual to Explore</b></h1>
+    <h1 class="w3-xxxlarge w3-text-red"><b>One Variable Line-Plot</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
+
+<script>
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer", {
+	title:{
+		text: "Weekly 2k Sales for First Quarter"
+	},
+	axisX:{
+	valueFormatString: "DD MMM",
+	crosshair:{
+	enabled: true,
+	snapToDataPoint:true
+	}
+	},
+	axisY:[
+	{
+		title: "Number of Sales",
+		includeZero: true,
+		crosshair: {
+		enabled: true
+		}
+	}],
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		cursor: "pointer",
+		itemclick: toggleDataSeries
+	},
+	data: [{
+		type: "line",
+		name: "2K Game",
+		color: "#369EAD",
+		showInLegend: true,
+		axisYIndex: 1,
+		dataPoints: [
+			{ x: new Date(2017, 00, 7), y: 85.4 },
+			{ x: new Date(2017, 00, 14), y: 92.7 },
+			{ x: new Date(2017, 00, 21), y: 64.9 },
+			{ x: new Date(2017, 00, 28), y: 58.0 },
+			{ x: new Date(2017, 01, 4), y: 63.4 },
+			{ x: new Date(2017, 01, 11), y: 69.9 },
+			{ x: new Date(2017, 01, 18), y: 88.9 },
+			{ x: new Date(2017, 01, 25), y: 66.3 },
+			{ x: new Date(2017, 02, 4), y: 82.7 },
+			{ x: new Date(2017, 02, 11), y: 60.2 },
+			{ x: new Date(2017, 02, 18), y: 87.3 },
+			{ x: new Date(2017, 02, 25), y: 98.5 }
+		]
+	},
+	{
+		type: "line",
+		name: "Order",
+		color: "#C24642",
+		axisYIndex: 0,
+		showInLegend: true,
+		dataPoints: [
+
+		]
+	},
+	{
+		type: "line",
+		name: "Revenue",
+		color: "#7F6084",
+		showInLegend: true,
+		dataPoints: [
+
+		]
+	}]
+});
+chart.render();
+
+function toggleDataSeries(e) {
+	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else {
+		e.dataSeries.visible = true;
+	}
+	e.chart.render();
+}
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 400px; width: 80%;"></div>
+<script src="canvasjs.min.js"></script>
+</body>
+</html>
