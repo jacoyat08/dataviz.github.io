@@ -36,7 +36,7 @@ body {font-size:16px;}
       <a href="stackedbar.html" class="w3-bar-item w3-button">Stacked Variables Bar Chart</a>
     </div>
   </div>
-    <a href="histogram.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Histogram</a>
+    <a href="example1.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Histogram</a>
       <div class="w3-dropdown-hover">
           <button class="w3-button">Line Chart<i class="fa fa-caret-down"></i></button>
           <div class="w3-dropdown-content w3-bar-block">
@@ -44,11 +44,7 @@ body {font-size:16px;}
               <a href="multiline.html" class="w3-bar-item w3-button">Multiple Variables Line Chart</a>
           </div>
       </div>
-    <div class="w3-dropdown-hover">
-      <button class="w3-button">Scatter Plot<i class="fa fa-caret-down"></i></button>
-      <div class="w3-dropdown-content w3-bar-block">
-        <a href="scatter.html" class="w3-bar-item w3-button">Scatter Plot</a>
-        <a href="multiscatter.html" class="w3-bar-item w3-button">Multiple Variables Scatter Plot</a>
+    <a href="example.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Scatter Plot</a>
 </nav>
 
 <!-- Top menu on small screens -->
@@ -63,23 +59,24 @@ body {font-size:16px;}
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:340px;margin-right:40px">
 
-  <!-- scatter -->
-
   <!-- histogram -->
   <div class="w3-container" id="designers" style="margin-top:75px">
     <h1 class="w3-xxxlarge w3-text-red"><b>Histogram</b></h1>
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
   <meta charset="utf-8">
-  <p>Price Distribution of 100 Nike Tennis Shoes </p>
   <!-- Load d3.js -->
   <script src="https://d3js.org/d3.v4.js"></script>
   <!-- Create a div where the graph will take place -->
   <div id="my_dataviz"></div>
+  <p>
   <label># bins</label>
   <input type="number" min="1" max="100" step="30" value="20" id="nBin">
+  </p>
 
 </div>
+
+
 <script>
 // Script to open and close sidebar
 function w3_open() {
@@ -100,6 +97,13 @@ function onClick(element) {
   captionText.innerHTML = element.alt;
 }
 </script>
+
+
+
+<!-- bar -->
+
+<!-- box -->
+
 
 <script>
 
@@ -122,7 +126,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
 
   // X axis: scale and draw:
   var x = d3.scaleLinear()
-      .domain([0, 100])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
       .range([0, width]);
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
