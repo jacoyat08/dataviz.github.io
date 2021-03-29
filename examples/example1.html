@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Data Viz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3><a href='index.html'>Data Viz</a></h3>
+  </div>
+  <div class="w3-bar-block">
+    <a href="dotplot.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white"></a>
+    <div class="w3-dropdown-hover">
+      <button class="w3-button">Box-Plot<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block">
+        <a href="boxplot.html" class="w3-bar-item w3-button">One Variable Box-Plot</a>
+        <a href="threeboxplot.html" class="w3-bar-item w3-button">Three Variables Box-Plot</a>
+        <a href="multibox.html" class="w3-bar-item w3-button">Five Variables Box-Plot</a>      </div>
+    </div>
+    <div class="w3-dropdown-hover">
+      <button class="w3-button">Bar Chart<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block">
+      <a href="bar.html" class="w3-bar-item w3-button">One Variable Bar Chart</a>
+      <a href="multibar.html" class="w3-bar-item w3-button">Multiple Variables Bar Chart</a>
+      <a href="stackedbar.html" class="w3-bar-item w3-button">Stacked Variables Bar Chart</a>
+    </div>
+  </div>
+    <a href="example1.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Histogram</a>
+      <div class="w3-dropdown-hover">
+          <button class="w3-button">Line Chart<i class="fa fa-caret-down"></i></button>
+          <div class="w3-dropdown-content w3-bar-block">
+              <a href="line.html" class="w3-bar-item w3-button">One Variable Line Chart</a>
+              <a href="multiline.html" class="w3-bar-item w3-button">Multiple Variables Line Chart</a>
+          </div>
+      </div>
+    <a href="example.html" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Scatter Plot</a>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+  <span>DATAVIZ</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- histogram -->
+  <div class="w3-container" id="designers" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Histogram</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+  </div>
+  <meta charset="utf-8">
+  <!-- Load d3.js -->
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <!-- Create a div where the graph will take place -->
+  <div id="my_dataviz"></div>
+  <p>
+  <label># bins</label>
+  <input type="number" min="1" max="100" step="30" value="20" id="nBin">
+  </p>
+
+</div>
+
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+</script>
+
+
+
+<!-- bar -->
+
+<!-- box -->
+
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 40},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
+
+  // X axis: scale and draw:
+  var x = d3.scaleLinear()
+      .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .range([0, width]);
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Y axis: initialization
+  var y = d3.scaleLinear()
+      .range([height, 0]);
+  var yAxis = svg.append("g")
+
+  // A function that builds the graph for a specific value of bin
+  function update(nBin) {
+
+    // set the parameters for the histogram
+    var histogram = d3.histogram()
+        .value(function(d) { return d.price; })   // I need to give the vector of value
+        .domain(x.domain())  // then the domain of the graphic
+        .thresholds(x.ticks(nBin)); // then the numbers of bins
+
+    // And apply this function to data to get the bins
+    var bins = histogram(data);
+
+    // Y axis: update now that we know the domain
+    y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+    yAxis
+        .transition()
+        .duration(1000)
+        .call(d3.axisLeft(y));
+
+    // Join the rect with the bins data
+    var u = svg.selectAll("rect")
+        .data(bins)
+
+    // Manage the existing bars and eventually the new ones:
+    u
+        .enter()
+        .append("rect") // Add a new rect for each new elements
+        .merge(u) // get the already existing elements as well
+        .transition() // and apply changes to all of them
+        .duration(1000)
+          .attr("x", 1)
+          .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+          .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+          .attr("height", function(d) { return height - y(d.length); })
+          .style("fill", "#69b3a2")
+
+
+    // If less bar in the new histogram, I delete the ones not in use anymore
+    u
+        .exit()
+        .remove()
+
+    }
+
+
+  // Initialize with 20 bins
+  update(20)
+
+
+  // Listen to the button -> update if user change it
+  d3.select("#nBin").on("input", function() {
+    update(+this.value);
+  });
+
+});
+
+</script>
+</body>
+</html>

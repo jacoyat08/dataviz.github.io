@@ -1,64 +1,124 @@
+function fileChosen(e){
+  var filefield = document.getElementById('filefield');
+  var xSelectField = document.getElementById('select_field_x');
+  var ySelectField = document.getElementById('select_field_y');
 
-(function ($) {
-    "use strict";
+  var reader = new FileReader();
+  reader.onload = async function () {
+      var json = await csvJSON(reader.result);
+      var columns = Object.keys(json[0]);
+      for (a in xSelectField.options) {
+        xSelectField.options.remove(0);
+      }
+       columns.forEach((item, i) => {
+         var opt = document.createElement('option');
+         opt.value = item;
+         opt.innerHTML = item;
+         xSelectField.appendChild(opt);
+       });
 
-    /*==================================================================
-    [ Validate ]*/
-    var input = $('.validate-input .input100');
+       columns.forEach((item, i) => {
+         var opt = document.createElement('option');
+         opt.value = item;
+         opt.innerHTML = item;
+         ySelectField.appendChild(opt);
+       });
 
-    $('.validate-form').on('submit',function(){
-        var check = true;
-
-        for(var i=0; i<input.length; i++) {
-            if(validate(input[i]) == false){
-                showValidate(input[i]);
-                check=false;
-            }
-        }
-
-        return check;
-    });
+       window.json_data = json;
+       console.log(window.json_data);
 
 
-    $('.validate-form .input100').each(function(){
-        $(this).focus(function(){
-           hideValidate(this);
-        });
-    });
+  };
+  reader.readAsBinaryString(filefield.files[0]);
 
-    function validate (input) {
-        if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
-                return false;
-            }
-        }
-        else {
-            if($(input).val().trim() == ''){
-                return false;
-            }
-        }
+}
+
+function onsubmit(){
+  d3.select('#slider-svg').remove();
+  var xSelectField = document.getElementById('select_field_x').value;
+  var ySelectField = document.getElementById('select_field_y').value;
+  var xSelectFieldDataType = document.getElementById('select_field_x_datatype').value;
+  var ySelectFieldDataType = document.getElementById('select_field_y_datatype').value;
+  var chartType = document.getElementById('chart_type').value;
+  var data = window.json_data.map((item) => {
+    if(xSelectFieldDataType == 'Number'){
+      item[xSelectField] = parseInt(item[xSelectField]);
     }
-
-    function showValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).addClass('alert-validate');
+    if(ySelectFieldDataType == 'Number'){
+      item[ySelectField] = parseInt(item[ySelectField]);
     }
+    return item;
+  });
+  switch (chartType) {
+    case "bar":
+      drawBarChart(data, xSelectField, ySelectField, xSelectFieldDataType, ySelectFieldDataType);
+      break;
+    case "plot":
+      drawPlotChart(data, xSelectField, ySelectField, xSelectFieldDataType, ySelectFieldDataType);
+      break;
+    case "scatter":
+      drawScatterChart(data, xSelectField, ySelectField, xSelectFieldDataType, ySelectFieldDataType);
+      break;
+    case "line":
+      drawLineChart(data, xSelectField, ySelectField, xSelectFieldDataType, ySelectFieldDataType);
+      break;
+    case "histogram":
+      drawHistogram(data, xSelectField, xSelectFieldDataType);
+      break;
+    default:
 
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
+  }
+}
 
-        $(thisAlert).removeClass('alert-validate');
+
+
+$(document).ready(function () {
+  // Listen to submit event on the <form> itself!
+  $('#selectfile').submit(function (e) {
+    e.preventDefault();
+    onsubmit();
+  });
+
+  $('#chart_type').change(function(e){
+    $('#diagram_type').text(`${e.target.value} chart`);
+    $('#select_field_y').show();
+    $('#label_field_y').show();
+    $('#select_field_x').show();
+    $('#label_field_x').show();
+    $('#select_field_y_datatype').show();
+    $('#label_field_y_datatype').show();
+    $('#select_field_x_datatype').show();
+    $('#label_field_x_datatype').show();
+    if(e.target.value == 'histogram'){
+      $('#select_field_y').hide();
+      $('#label_field_y').hide();
+      $('#select_field_y_datatype').hide();
+      $('#label_field_y_datatype').hide();
+      $('#select_field_x_datatype').hide();
+      $('#label_field_x_datatype').hide();
+    } else if (e.target.value == 'plot') {
+      $('#select_field_x').hide();
+      $('#label_field_x').hide();
+      $('#select_field_y_datatype').hide();
+      $('#label_field_y_datatype').hide();
+      $('#select_field_x_datatype').hide();
+      $('#label_field_x_datatype').hide();
     }
+  });
+});
 
-    /*==================================================================
-    [ Modal ]*/
-    $('.modal-subscribe').on('click',function(e){
-        e.stopPropagation();
-    })
-    
-    $('.btn-close-modal').on('click', function(){
-        $('#subscribe').modal('hide');
-    });
 
-})(jQuery);
+function csvJSON(csv) {
+    var lines = csv.split("\n");
+    var result = [];
+    var headers = lines[0].split(",");
+    for (var i = 1; i < lines.length - 1; i++) {
+        var obj = {};
+        var currentline = lines[i].split(",");
+        for (var j = 0; j < headers.length; j++) {
+          obj[headers[j]] = currentline[j];
+        }
+        result.push(obj);
+    }
+    return result; //JSON
+}
