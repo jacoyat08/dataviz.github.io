@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Data Viz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3><a href='index.html'>Data Viz</a></h3>
+  </div>
+    <div class="w3-dropdown-hover">
+      <button class="w3-button">Choose a Plot to Generate<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block">
+        <a href="genbox.html" class="w3-bar-item w3-button">Multiple Variables Box-Plot</a>
+        <a href="genbar.html" class="w3-bar-item w3-button">One Variable Bar Chart</a>
+        <a href="genmultibar.html" class="w3-bar-item w3-button">Multiple Variables Bar Chart</a>
+        <a href="genhis.html" class="w3-bar-item w3-button">Histogram</a>
+        <a href="genline.html" class="w3-bar-item w3-button">Line Chart</a>
+        <a href="genscatter.html" class="w3-bar-item w3-button">Scatter Plot</a>
+      </div>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+  <span>DATAVIZ</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- scatter -->
+  <div class="w3-container" id="packages" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Bar-Plot</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+  </div>
+
+
+<script src="canvasjs.min.js"></script>
+
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+<script>
+
+
+
+window.onload = function() {
+
+  var chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    title: {
+      text: "Try Dragging Any Column to Resize"
+    },
+    axisX:{
+      minimum: 5,
+      maximum: 95
+    },
+    data: [{
+      type: "column",
+      dataPoints: [
+        { x: 10, y: 71 },
+        { x: 20, y: 55 },
+        { x: 30, y: 50 },
+        { x: 40, y: 65 },
+        { x: 50, y: 95 },
+        { x: 60, y: 68 },
+        { x: 70, y: 28 },
+        { x: 80, y: 34 },
+        { x: 90, y: 14 }
+      ]
+    }]
+  });
+  chart.render();
+
+  var xSnapDistance = chart.axisX[0].convertPixelToValue(chart.get("dataPointWidth")) / 2;
+  var ySnapDistance = 3;
+
+  var xValue, yValue;
+
+  var mouseDown = false;
+  var selected = null;
+  var changeCursor = false;
+
+  var timerId = null;
+  var yAxisIntervals = [];
+
+  function getNearestValue(currrentY, yAxisIntervals) {
+    var nearestYValue = yAxisIntervals[0];
+    var diff = Math.abs (currrentY - nearestYValue);
+    for (var i = 0; i < yAxisIntervals.length; i++) {
+      if (Math.abs (currrentY - yAxisIntervals[i]) < diff) {
+        diff = Math.abs (currrentY - yAxisIntervals[i]);
+        nearestYValue = yAxisIntervals[i];
+      }
+    }
+    return nearestYValue;
+  }
+
+
+  function getPosition(e) {
+    var parentOffset = $("#chartContainer > .canvasjs-chart-container").offset();
+    var relX = e.pageX - parentOffset.left;
+    var relY = e.pageY - parentOffset.top;
+    xValue = Math.round(chart.axisX[0].convertPixelToValue(relX));
+    yValue = Math.round(chart.axisY[0].convertPixelToValue(relY));
+  }
+
+  function searchDataPoint() {
+    var dps = chart.data[0].dataPoints;
+    for(var i = 0; i < dps.length; i++ ) {
+      if( (xValue >= dps[i].x - xSnapDistance && xValue <= dps[i].x + xSnapDistance) && (yValue >= dps[i].y - ySnapDistance && yValue <= dps[i].y + ySnapDistance) )
+      {
+        if(mouseDown) {
+          selected = i;
+          break;
+        } else {
+          changeCursor = true;
+          break;
+        }
+      } else {
+        selected = null;
+        changeCursor = false;
+      }
+    }
+  }
+
+  jQuery("#chartContainer > .canvasjs-chart-container").on({
+    mousedown: function(e) {
+      mouseDown = true;
+      getPosition(e);
+      searchDataPoint();
+    },
+    mousemove: function(e) {
+      getPosition(e);
+      if(mouseDown) {
+        clearTimeout(timerId);
+        timerId = setTimeout(function(){
+          if(selected != null) {
+            yAxisIntervals = [];
+            for(var i = chart.axisY[0].minimum - chart.axisY[0].interval; i <= chart.axisY[0].maximum; i += chart.axisY[0].interval)
+              yAxisIntervals.push(i);
+            yValue = getNearestValue(yValue, yAxisIntervals);
+            chart.data[0].dataPoints[selected].y = yValue;
+            chart.render();
+          }
+        }, 0);
+      }
+      else {
+        searchDataPoint();
+        if(changeCursor) {
+          chart.data[0].set("cursor", "n-resize");
+        } else {
+          chart.data[0].set("cursor", "default");
+        }
+      }
+    },
+    mouseup: function(e) {
+      if(selected != null) {
+        chart.data[0].dataPoints[selected].y = yValue;
+        chart.render();
+        mouseDown = false;
+      }
+    }
+  });
+
+}
+
+    </script>

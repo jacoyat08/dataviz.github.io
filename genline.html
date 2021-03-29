@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Data Viz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3><a href='index.html'>Data Viz</a></h3>
+  </div>
+    <div class="w3-dropdown-hover">
+      <button class="w3-button">Choose a Plot to Generate<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block">
+          <a href="genbox.html" class="w3-bar-item w3-button">Multiple Variables Box-Plot</a>
+        <a href="genbar.html" class="w3-bar-item w3-button">One Variable Bar Chart</a>
+        <a href="genline.html" class="w3-bar-item w3-button">Line Chart</a>
+      </div>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+  <span>DATAVIZ</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- scatter -->
+  <div class="w3-container" id="packages" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Line Plot</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+  </div>
+
+<br/><!-- Just so that JSFiddle's Result label doesn't overlap the Chart -->
+<div>
+     Select number of Variables   <select id="numberOfSeries">
+     <option>--Select--</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    </select>
+</div>
+<br/>
+<style type="text/css">
+    .center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    }
+</style>
+<input class="center-block" type="text">
+
+<div id="chartContainer" style="height: 360px; width: 100%;"></div>
+<script src="canvasjs.min.js"></script>
+
+<script>
+  var dataSeries = [{
+  type: "line",
+  showInLegend: true,
+  dataPoints: [
+    { label: "Jan", y: 71 },
+    {label: "Feb", y: 55 },
+    {label: "Mar", y: 50 },
+    {label: "Apr", y: 65 },
+    { label: "May", y: 92 },
+    { label: "Jun", y: 68 },
+    { label: "Jul", y: 58 },
+    { label: "Aug", y: 78 },
+    { label: "Sept", y: 88 },
+    { label: "Oct", y: 90 },
+    { label: "Nov", y: 68 },
+    { label: "Dec", y: 68 },
+  ]
+}, {
+  type: "line",
+  showInLegend: true,
+  dataPoints: [
+    { label: "Jan", y: 10 },
+    { label: "Feb", y: 25 },
+    { label: "Mar", y: 40 },
+    { label: "Apr", y: 55 },
+    { label: "May", y: 20 },
+    {label: "Jun", y: 5 },
+    { label: "Jul", y: 8 },
+    { label: "Aug", y: 10 },
+    { label: "Sept", y: 20 },
+    { label: "Oct", y: 22 },
+    { label: "Nov", y: 30 },
+    { label: "Dec", y: 40 },
+  ]
+}, {
+  type: "line",
+  showInLegend: true,
+  dataPoints: [
+   { label: "Jan", y: 5 },
+    { label: "Feb", y: 15 },
+    { label: "Mar", y: 20 },
+    { label: "Apr", y: 25 },
+    { label: "May", y: 30 },
+    {label: "Jun", y: 45 },
+    { label: "Jul", y: 60 },
+    { label: "Aug", y: 65 },
+    { label: "Sept", y: 68 },
+    { label: "Oct", y: 65 },
+    { label: "Nov", y: 50 },
+    { label: "Dec", y: 50 },
+  ]
+}, {
+  type: "line",
+  showInLegend: true,
+  dataPoints: [
+    { x: 10, y: 80 },
+    { x: 20, y: 45 },
+    { x: 30, y: 70 },
+    { x: 40, y: 40 },
+    { x: 50, y: 35 },
+    { x: 60, y: 20 },
+  ]
+}];
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	theme: "light2",
+  title:{
+    text:""
+  },
+  subtitles: [{
+  	text: ""
+  }],
+  data: []
+});
+
+chart.render();
+
+document.getElementById("numberOfSeries").addEventListener( "change",  updateNumberOfDataSeries);
+
+function updateNumberOfDataSeries() {
+  var numberOfSeries = Number(document.getElementById("numberOfSeries").value);
+  chart.options.data = [];
+  if(!isNaN(numberOfSeries))
+    for( var i = 0; i < numberOfSeries; i++){
+      chart.options.data.push(dataSeries[i]);
+    }
+  chart.render();
+}
+
+</script>
+
+
