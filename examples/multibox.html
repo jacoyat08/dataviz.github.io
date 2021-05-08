@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<script src="https://d3js.org/d3.v4.js"></script>
+<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+
 <style>
 body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
 body {font-size:16px;}
@@ -25,8 +30,8 @@ body {font-size:16px;}
       <button class="w3-button">Box-Plot<i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block">
         <a href="boxplot.html" class="w3-bar-item w3-button">One Variable Box-Plot</a>
-        <a href="threeboxplot.html" class="w3-bar-item w3-button">Three Variables Box-Plot</a>
-        <a href="multibox.html" class="w3-bar-item w3-button">Five Variables Box-Plot</a>      </div>
+        <a href="multibox.html" class="w3-bar-item w3-button">Multiple Variables Box-Plot</a>
+    </div>
     </div>
     <div class="w3-dropdown-hover">
       <button class="w3-button">Bar Chart<i class="fa fa-caret-down"></i></button>
@@ -68,68 +73,101 @@ body {font-size:16px;}
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
 <meta charset="UTF-8">
+
+<!-- Create a div where the graph will take place -->
+<div class="w3-container w3-padding-64 w3-center" >
+<style>
+h3 {
+  color: black;
+}
+h5 {
+  color: red;
+}
+h6 {
+  color: red;
+}
+</style>
+<h2>Box Plot</h2>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<h4>Instructions</h4>
+<p>Use your mouse hover over data points and box plots to learn about each individual player.</p>
+<p>Using the legend on the right of the box-plot click to add or remove players from the plot. </p>
+<div id='myDiv'></div>
+<h5>1. Remove any 4 players. With the remaining players identify the 5 number summary.</h5>
+<textarea id="w3review" name="w3review" rows="3" cols="60"></textarea>
+<h5> 2. Remove any 3 players. With the remaining players identify the mean.</h5>
+ <textarea id="w3review" name="w3review" rows="3" cols="60"></textarea>
+<h5>3.Identify three different things you see on the box plot.</h5>
+<h5>Come up with an explanation for each thing you identified.</h5>
+<h6>hint: look at the boxes length, number of data points, and/or whiskers.</h6>
+<textarea id="w3review" name="w3review" rows="3" cols="60"></textarea>
+</div>
+
 <script>
-window.onload = function () {
+var trace1 = {
+  y: [30,21,27,30,38,30,27,12,26,17,24,26,28,19,34,11,17,34,23,42,20,25,
+  26,35,19,24,18,24,36,30,43,32,39,36,33,31,31,22,14,29,30,28,31,25,24,19],
+  boxpoints: 'all',
+  jitter: 0.3,
+  pointpos: -1.8,
+  type: 'box',
+  name: 'Kawhi Leonard'
+};
 
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	theme: "light2", // "light1", "light2", "dark1", "dark2"
-	title:{
-		text: "Player Points Scored Per NBA Game in 2019"
-	},
-	axisY: {
-		title: "Points Scored",
-		includeZero: false,
-		tickLength: 0,
-		gridDashType: "dash",
-		stripLines: [{
-			labelFontColor: "#FF0800",
-			showOnTop: true,
-			labelAlign: "center",
-			color: "#FF0800"
-		}]
-	},
-	legend: {
-		cursor: "pointer",
-		itemclick: toggleDataSeries
-	},
-	data: [{
-		type: "boxAndWhisker",
-		toolTipContent: "<span style='color:#6D78AD'>{label}:</span> <br><b>Maximum:</b> {y[3]},<br><b>Q3:</b> {y[2]},<br><b>Median:</b> {y[4]}<br><b>Q1:</b> {y[1]}<br><b>Minimum:</b> {y[0]}",
-		dataPoints: [
-			{ x: 0, label: "Lebron James",  y: [12,20,33,50,30,] },
-			{ x: 1, label: "Carmelo Anthony", y: [6,14,24,33,18] },
-			{ x: 2, label: " Dwyane Wade",  y: [8, 8, 23, 30, 20] },
-			{ x: 3, label: " Damian Lillard",  y: [4, 13, 24, 38, 19] },
-			{ x: 4, label: "Stephen Curry",  y: [20,23,34,50,29]}
-		]
-	},
-	{
-		type: "scatter",
-		name: "Outlier Values",
-		showInLegend: true,
-		dataPoints: [
-			{ x: 1, label: "Carmelo Anthony", y: 39 },
-			{ x: 2, label: "Dwyane Wade", y: 42 },
-			{ x: 2, label: "Dwyane Wade", y: 2 },
-		]
-	}]
-});
-chart.render();
+var trace2 = {
+  y: [18, 32,20,23,39,21,30,25,13,19,23,29,33,25,23,30,33,29,23,25,25,
+  20,31,32,25,28,32,25,28,32,20,21,23,21,13,31,17,21,31,35,31,19,31,15],
+  boxpoints: 'all',
+  jitter: 0.3,
+  pointpos: -1.8,
+  type: 'box',
+  name: 'LeBron James'
+};
 
-function toggleDataSeries(e) {
-	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-		e.dataSeries.visible = false;
-	} else {
-		e.dataSeries.visible = true;
-	}
-	e.chart.render();
-}
+var trace3 = {
+  y: [30, 29,14,22,29,36,34,38,30,26,33,24,28,50,30,33,26,29,35,27,
+  30,21,33,27,36,17,32,31,32,38,21,37,45,32,39,23,24],
+  boxpoints: 'all',
+  jitter: 0.3,
+  pointpos: -1.8,
+  type: 'box',
+  name: 'Giannis Antetokounmpo'
+};
 
-}
+var trace4 = {
+  y: [23, 23,26,9],
+  boxpoints: 'all',
+  jitter: 0.3,
+  pointpos: -1.8,
+  type: 'box',
+  name: 'Stephen Curry '
+};
+
+var trace5 = {
+  y: [19,29,40,59,36,29,44,36,42,39,47,44,49,36,27,37,32,43,60,50,
+  23,34,27,30,21,33,27,36,17,32,31,32,38,21,37,27,45,32,39,23,24,49,37,23,30,26,35,21,30,37],
+  boxpoints: 'all',
+  jitter: 0.3,
+  pointpos: -1.8,
+  type: 'box',
+  name: 'James Harden '
+};
+
+var trace6 = {
+  y: [25,21,29,40,31,25,15,26,27,24,17,14,34,33,22,19,41,26,27,25,
+  26,39,50,30,21,33,27,36,17,32,38,21,37,27,45,32,39,23,24,49,37,23,30,26,35,21,30],
+  boxpoints: 'all',
+  jitter: 0.3,
+  pointpos: -1.8,
+  type: 'box',
+  name: 'Anthony Davis '
+};
+var data = [trace1, trace2, trace3, trace4, trace5, trace6];
+
+var layout = {
+title:"Points Scored by Top 6 NBA Players of 2019-2020 Season"
+};
+
+Plotly.newPlot('myDiv', data, layout);
 </script>
-</head>
-<body>
-<div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
-<script src="canvasjs.min.js"></script>
-</body>
+
